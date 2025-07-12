@@ -1,5 +1,6 @@
-streamlit
-tensorflow
-pandas
-numpy
-Pillow
+numpy==1.23.5
+pandas==2.3.0
+streamlit==1.46.0
+tensorflow==2.12.0
+tensorflow-estimator==2.12.0
+tensorflow-io-gcs-filesystem==0.37.1
