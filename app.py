@@ -28,11 +28,16 @@ def load_preprocessing(path="preprocessing.pkl"):
 @st.cache_resource
 def load_models():
     model_paths = {name: ROOT_DIR / f"{name}.keras" for name in ['cnn', 'bilstm', 'transformer', 'meta']}
+    
+    for name, path in model_paths.items():
+        st.write(f"{name}: {path} - Exists: {path.exists()}")
+    
     missing = [name for name, path in model_paths.items() if not path.exists()]
     if missing:
         st.error(f"Missing models: {', '.join(missing)}. Please make sure all model files are available.")
         st.stop()
     return {name: load_model(str(path)) for name, path in model_paths.items()}
+
 
 # ====== 3. Predict from Sequence ======
 def predict_sequence(seq, kmer_to_index, max_len, models):
