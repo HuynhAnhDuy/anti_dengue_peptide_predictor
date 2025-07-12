@@ -13,22 +13,26 @@ from tensorflow.keras.layers import (
     Bidirectional, LSTM, Dense, Dropout,
     Input, LayerNormalization, MultiHeadAttention, GlobalAveragePooling1D
 )
+from pathlib import Path
+# Base directory (where app.py is located)
+ROOT_DIR = Path(__file__).parent
 
 # ====== 1. Load Preprocessing Config ======
 @st.cache_resource
 def load_preprocessing(path="preprocessing.pkl"):
-    with open(path, "rb") as f:
+    with open(ROOT_DIR / path, "rb") as f:
         config = pickle.load(f)
     return config["kmer_to_index"], config["max_length"]
 
-# ====== 2. Load Trained Models ======
+# Load models with correct path
 @st.cache_resource
 def load_models():
-    missing = [name for name in ['cnn','bilstm','transformer','meta'] if not os.path.exists(f"{name}.keras")]
+    model_paths = {name: ROOT_DIR / f"{name}.keras" for name in ['cnn', 'bilstm', 'transformer', 'meta']}
+    missing = [name for name, path in model_paths.items() if not path.exists()]
     if missing:
         st.error(f"Missing models: {', '.join(missing)}. Please make sure all model files are available.")
         st.stop()
-    return {name: load_model(f"{name}.keras") for name in ['cnn','bilstm','transformer','meta']}
+    return {name: load_model(str(path)) for name, path in model_paths.items()}
 
 # ====== 3. Predict from Sequence ======
 def predict_sequence(seq, kmer_to_index, max_len, models):
