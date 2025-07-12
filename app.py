@@ -14,19 +14,6 @@ from tensorflow.keras.layers import (
     Input, LayerNormalization, MultiHeadAttention, GlobalAveragePooling1D
 )
 
-# ====== Google Analytics Tracking (GA4) ======
-GA_JS = """
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y27P57QD3C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-Y27P57QD3C');
-</script>
-"""
-st.markdown(GA_JS, unsafe_allow_html=True)
-
 # ====== 1. Load Preprocessing Config ======
 @st.cache_resource
 def load_preprocessing(path="preprocessing.pkl"):
